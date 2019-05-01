@@ -33,12 +33,12 @@ class DBClient {
     }
 
     // Queries
-    showDataInCollection(collectionName, callback) {
+    showDataInCollection(guildName, collectionName, callback) {
         this.client.connect((error) => {
             assert.equal(null, error); // based on boilerplate at api docs (link above)
             const collection = this.getCollection(collectionName);
 
-            collection.find({}).toArray((error, result) => {
+            collection.find({ guild_name: guildName }).toArray((error, result) => {
                 assert.equal(null, error);
                 callback(error, result);
             });
@@ -58,24 +58,24 @@ class DBClient {
     }
 
     // Specialized Siege Match queries
-    getMostRecentSiegeMatch(callback) {
+    getMostRecentSiegeMatch(guildName, callback) {
         this.client.connect((error) => {
             assert.equal(null, error); // based on boilerplate at api docs (link above)
             const collection = this.getCollection('siegeMatches');
 
-            collection.find().sort({ siege_id: -1 }).limit(1).next((error, result) => {
+            collection.find({ guild_name: guildName }).sort({ siege_id: -1 }).limit(1).next((error, result) => {
                 assert.equal(null, error);
                 callback(error, result);
             });
         });
     }
 
-    getSiegeMatchIDs(limit, callback) {
+    getSiegeMatchIDs(guildName, limit, callback) {
         this.client.connect((error) => {
             assert.equal(null, error); // based on boilerplate at api docs (link above)
             const collection = this.getCollection('siegeMatches');
 
-            collection.find({}, { projection: {_id: 0, siege_id: 1} }) // mongoDB _id displayed unless explicitly told not to
+            collection.find({ guild_name: guildName }, { projection: {_id: 0, siege_id: 1} }) // mongoDB _id displayed unless explicitly told not to
             .limit(limit).sort({ siege_id: -1 }).toArray((error, result) => {
                 assert.equal(null, error);
                 callback(error, result);
@@ -84,12 +84,12 @@ class DBClient {
     }
 
     // Specialized Battle Log queries
-    getMostRecentBattleLogs(logType, callback) {
+    getMostRecentBattleLogs(guildName, logType, callback) {
         this.client.connect((error) => {
             assert.equal(null, error); // based on boilerplate at api docs (link above)
             const collection = this.getCollection('battleLogs');
 
-            collection.find({ log_type: logType }).sort({ siege_id: -1 }).limit(1).next((error, result) => {
+            collection.find({ guild_name: guildName, log_type: logType }).sort({ siege_id: -1 }).limit(1).next((error, result) => {
                 assert.equal(null, error);
                 callback(error, result);
             });
