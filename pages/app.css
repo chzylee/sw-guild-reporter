@@ -30,6 +30,10 @@ html {
     margin-bottom: 8px;
 }
 
+.Error {
+    margin-top: 128px;
+}
+
 .ListWrapper {
     text-align: center;
     width: 30%;

@@ -43,10 +43,10 @@ class WeekSummary extends React.Component {
         if (this.state.error) {
             return (
                 <MDBContainer fluid className="PageWrapper">
-                    <div className="Title">
+                    <MDBContainer fluid className="Title">
                         <h2>{SWDisplayUtils.getSiegeWeekTitle(this.props.siegeWeekID)}</h2>
-                        <h4>{this.state.error}</h4>
-                    </div>
+                        <h3 className="Error">{this.state.error}</h3>
+                    </MDBContainer>
                 </MDBContainer>
             );
         } else {
