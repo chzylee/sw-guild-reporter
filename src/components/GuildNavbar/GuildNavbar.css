@@ -1,0 +1,49 @@
+.GuildNavbar {
+    margin-bottom: 18px;
+    text-align: center
+}
+
+.GuildNavbar * {
+    background-color: #212121;
+}
+
+.NavContentWrapper {
+    text-align: center;
+    margin: auto;
+    width: auto;
+}
+
+.NavContentWrapper > * {
+    margin-left: 12px;
+    margin-right: 12px;
+    color: #C8C8C8;
+}
+
+.MainNav > * {
+    margin-left: 12px;
+    margin-right: 12px;
+    color: #C8C8C8;
+}
+
+.MainNav > * {
+    color: rgb(38, 147, 255);
+}
+
+.navbar .dropdown-menu a {
+    color: rgb(38, 147, 255);
+    -webkit-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+}
+
+.navbar .dropdown-menu a:hover {
+    color: rgb(45, 100, 180);
+    background-color: rgba(200, 200, 200, 0.8);
+    box-shadow: 
+        0 0   8px  2px rgba(0, 123, 255, 0.355), 
+        0 5px 10px 4px rgba(0, 60, 180, 0.215);
+    z-index: 2;
+}
+
+.dropdown-divider {
+    border-top: 1px solid rgba(180, 180, 180, 0.65);
+}

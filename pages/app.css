@@ -1,0 +1,65 @@
+* {
+    color: #DDDDDD;
+}
+
+html {
+    background-color: #181818;
+}
+
+.AppWrapper {
+    background-color: #181818;
+    height: 100vh;
+}
+
+.Footer {
+    height: 128px;
+}
+
+.PageWrapper {
+    background-color: #181818;
+}
+
+.Title {
+    text-align: center;
+    width: 50%;
+    margin-bottom: 18px;
+}
+
+.Title > .row {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.ListWrapper {
+    text-align: center;
+    width: 30%;
+}
+
+.list-group {
+    box-shadow: 
+        0 0   8px  4px rgba(0, 0, 0, 0.375), 
+        0 0 10px 8px rgba(0, 0, 0, 0.215);
+    text-align: center;
+}
+
+.list-group-item {
+    background-color: #32363F;
+    -webkit-transition: height 0.5s;
+    transition: height 0.5s;
+}
+
+.list-group-item:hover {
+    box-shadow: 
+        0 -5px  8px 4px rgba(0, 0, 0, 0.375), 
+        0  5px 10px 8px rgba(0, 0, 0, 0.215);
+    z-index: 2;
+    height: 110%;
+}
+
+.list-group-item > a {
+    color: rgba(200, 200, 200, 0.8);
+}
+
+.DeckContainer {
+    width: 75%;
+}

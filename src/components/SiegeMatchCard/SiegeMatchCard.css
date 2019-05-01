@@ -1,0 +1,26 @@
+.SiegeMatchCard {
+    background-color: #212529;
+    box-shadow: 
+        0 0   8px  4px rgba(45, 100, 180, 0.275), 
+        0 5px 10px 8px rgba(25, 44, 80, 0.215);
+}
+
+a {
+    color: rgb(38, 147, 255);
+}
+
+.GuildScoreSummary {
+    margin: auto;
+}
+
+.card .card-body .card-text {
+    color: #DDDDDDC0;
+}
+
+.GuildName {
+    text-align: left;
+}
+
+.ScoreSummary {
+    text-align: right;
+}

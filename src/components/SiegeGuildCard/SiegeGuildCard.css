@@ -1,0 +1,26 @@
+.SiegeGuildCard MDBCardTitle {
+    font-weight: bold;
+}
+
+.SiegeGuildCard {
+    background-color: #212529;
+    box-shadow: 
+        0 0   8px  4px rgba(0, 0, 0, 0.375), 
+        0 5px 10px 8px rgba(0, 0, 0, 0.215);
+}
+
+.Winner {
+    /* Based on original box shadow from this component */
+    box-shadow: 
+        0 0   8px  4px rgba(72, 203, 109, 0.555), 
+        0 5px 10px 8px rgba(0, 150, 123, 0.375);
+    border-radius: 8px;
+}
+
+.PointsLabel {
+    font-weight: bold;
+}
+
+.PointsPerMinLabel {
+    font-style: italic;
+}

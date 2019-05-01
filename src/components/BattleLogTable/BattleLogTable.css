@@ -1,0 +1,36 @@
+.BattleLogTable {
+    padding: 10px 80px 10px 80px;
+}
+
+select {
+    margin-left: 8px;
+}
+
+option {
+    color: #282828;
+}
+
+table {
+    box-shadow: 
+        0 0   8px  4px rgba(45, 100, 180, 0.275), 
+        0 5px 10px 8px rgba(25, 44, 80, 0.215);
+    border: 1px solid #454d55;
+    margin-top: 8px;
+}
+
+thead, tr, th, td {
+    border: 1px solid #454d55;
+}
+
+.page-item {
+    background-color: #282828;
+    color: #888888;
+}
+
+h4 {
+    font-size: 1.2em
+}
+
+.numberSpan {
+    font-style: italic;
+}

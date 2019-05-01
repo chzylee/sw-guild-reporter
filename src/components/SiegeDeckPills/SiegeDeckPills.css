@@ -1,0 +1,34 @@
+.nav {
+    margin-bottom: 18px;
+}
+
+.list-group {
+    margin-top: 18px;
+}
+
+.nav-pills .nav-link {
+    box-shadow: 
+        0 0   8px  2px rgba(0, 123, 255, 0.355), 
+        0 5px 10px 4px rgba(0, 60, 180, 0.215);
+}
+
+.PlayerDeck {
+    color: #181818;
+    margin-bottom: 8px;
+}
+
+.PlayerDeck > span {
+    margin-left: 4px;
+}
+
+.PlayerDeck > * {
+    color: #212529;
+}
+
+.SuccessRate {
+    font-style: italic;
+}
+
+.modal-title {
+    color: #181818;
+}
