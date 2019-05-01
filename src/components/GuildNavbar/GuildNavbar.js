@@ -16,7 +16,7 @@ class GuildNavbar extends Component {
     }
 
     componentWillMount() {
-        axios.get('/db/Kingfisher/siegeMatches/id/list/recent').then((response) => {
+        axios.get('/api/Kingfisher/siegeMatches/id/list/recent').then((response) => {
             this.setState({
                 recentMatches: response.data.result
             });

@@ -31,7 +31,7 @@ app.prepare().then(() => {
     server.use(express.urlencoded());
 
     // Siege Match database endpoints
-    server.post('/db/:guildName/siegeMatches', (req, res) => {
+    server.post('/api/:guildName/siegeMatches', (req, res) => {
         logger.trace('Received siege match data');
         dbClient.updateDataInCollection({ 
             guild_name: req.params.guildName, 
@@ -41,21 +41,21 @@ app.prepare().then(() => {
         });
     });
 
-    server.get('/db/:guildName/siegeMatches', (req, res) => {
+    server.get('/api/:guildName/siegeMatches', (req, res) => {
         logger.trace('Received request for siege match data');
         dbClient.showDataInCollection(req.params.guildName, 'siegeMatches', (error, result) => {
             ServerUtils.sendSimpleQueryResponse(error, result, 'siege match', logger, res);
         });
     });
 
-    server.get('/db/:guildName/siegeMatches/latest', (req, res) => {
+    server.get('/api/:guildName/siegeMatches/latest', (req, res) => {
         logger.trace('Received request for latest siege match data');
         dbClient.getMostRecentSiegeMatch(req.params.guildName, (error, result) => {
             ServerUtils.sendSimpleQueryResponse(error, result, 'siege match', logger, res);
         });
     });
 
-    server.get('/db/:guildName/siegeMatches/id/list/:count', (req, res) => {
+    server.get('/api/:guildName/siegeMatches/id/list/:count', (req, res) => {
         logger.trace(`Received request for ${req.params.count} siege match IDs`);
         const limit = ServerUtils.getLimitForCount(req.params.count);
         if (limit < 0) {
@@ -75,7 +75,7 @@ app.prepare().then(() => {
         }
     });
 
-    server.get('/db/:guildName/siegeMatches/id/:siegeID', (req, res) => {
+    server.get('/api/:guildName/siegeMatches/id/:siegeID', (req, res) => {
         logger.trace(`Received request for siege match data`);
         const siegeID = parseInt(req.params.siegeID, 10); // params stored as strings
         if (isNaN(siegeID)) {
@@ -94,7 +94,7 @@ app.prepare().then(() => {
         }
     });
 
-    server.get('/db/:guildName/siegeMatches/week/:week', (req, res) => {
+    server.get('/api/:guildName/siegeMatches/week/:week', (req, res) => {
         logger.trace(`Received request for siege match data from week ${req.params.week}`);
         if (!ServerUtils.isValidWeek(req.params.week)) {
             logger.warn('Received invalid week parameter');
@@ -124,7 +124,7 @@ app.prepare().then(() => {
     });
 
     // Battle Log database endpoints
-    server.post('/db/:guildName/battleLogs', (req, res) => {
+    server.post('/api/:guildName/battleLogs', (req, res) => {
         logger.trace('Received battle log data');
         dbClient.updateDataInCollection({ 
             guild_name: req.params.guildName, 
@@ -135,14 +135,14 @@ app.prepare().then(() => {
         });
     });
 
-    server.get('/db/:guildName/battleLogs', (req, res) => {
+    server.get('/api/:guildName/battleLogs', (req, res) => {
         logger.trace('Received request for battle log data');
         dbClient.showDataInCollection(req.params.guildName, 'battleLogs', (error, result) => {
             ServerUtils.sendSimpleQueryResponse(error, result, 'battle log', logger, res);
         });
     });
 
-    server.get('/db/:guildName/battleLogs/:logType/latest', (req, res) => {
+    server.get('/api/:guildName/battleLogs/:logType/latest', (req, res) => {
         logger.trace('Received request for latest battle log data');
         const logType = req.params.logType;
         if (!ServerUtils.isValidLogType(logType)) {
@@ -156,7 +156,7 @@ app.prepare().then(() => {
         }
     });
 
-    server.get('/db/:guildName/battleLogs/:logType/id/:siegeID', (req, res) => {
+    server.get('/api/:guildName/battleLogs/:logType/id/:siegeID', (req, res) => {
         logger.trace('Received request for latest battle log data');
         if (!ServerUtils.isValidLogType(req.params.logType)) {
             logger.warn('Received invalid battle log type');
@@ -178,7 +178,7 @@ app.prepare().then(() => {
         }
     });
 
-    server.get('/db/:guildName/battleLogs/:logType/week/:week', (req, res) => {
+    server.get('/api/:guildName/battleLogs/:logType/week/:week', (req, res) => {
         logger.trace(`Received request for battle log data from week ${req.params.week}`);
         if (!ServerUtils.isValidWeek(req.params.week)) {
             logger.warn('Received invalid week parameter');
@@ -210,7 +210,7 @@ app.prepare().then(() => {
     });
 
     // Siege Deck database endpoints
-    server.post('/db/:guildName/siegeDecks', (req, res) => {
+    server.post('/api/:guildName/siegeDecks', (req, res) => {
         logger.trace('Received siege deck data');
         dbClient.updateDataInCollection({ 
             guild_name: req.params.guildName, 
@@ -220,7 +220,7 @@ app.prepare().then(() => {
         });
     });
 
-    server.get('/db/:guildName/siegeDecks', (req, res) => {
+    server.get('/api/:guildName/siegeDecks', (req, res) => {
         logger.trace('Received request for siege deck data');
         dbClient.showDataInCollection(req.params.guildName, 'siegeDecks', (error, result) => {
             ServerUtils.sendSimpleQueryResponse(error, result, 'siege deck', logger, res);
