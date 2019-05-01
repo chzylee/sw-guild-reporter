@@ -22,9 +22,9 @@ class WeekSummary extends React.Component {
 
     componentWillMount() {
         axios.all([
-            axios.get(`/db/siegeMatches/week/${this.props.siegeWeekID}`),
-            axios.get(`/db/battleLogs/attack/week/${this.props.siegeWeekID}`),
-            axios.get(`/db/battleLogs/defense/week/${this.props.siegeWeekID}`),
+            axios.get(`/api/Kingfisher/siegeMatches/week/${this.props.siegeWeekID}`),
+            axios.get(`/api/Kingfisher/battleLogs/attack/week/${this.props.siegeWeekID}`),
+            axios.get(`/api/Kingfisher/battleLogs/defense/week/${this.props.siegeWeekID}`),
         ]).then(axios.spread((siegeMatches, attackLogs, defenseLogs) => {
             this.setState({
                 siegeMatches: siegeMatches.data.result, 
