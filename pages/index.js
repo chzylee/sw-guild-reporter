@@ -4,6 +4,7 @@ import SWDisplayUtils from '../src/swDisplayUtils';
 
 import SiegeMatchHeader from '../src/components/SiegeMatchHeader/SiegeMatchHeader';
 import BattleLogTable from '../src/components/BattleLogTable/BattleLogTable';
+import { Button } from "react-bootstrap";
 
 class Index extends React.Component {
     constructor(props) {
@@ -23,9 +24,9 @@ class Index extends React.Component {
 
     componentWillMount() {
         axios.all([
-            axios.get(`/db/siegeMatches/${this.props.apiRoute}`),
-            axios.get(`/db/battleLogs/attack/${this.props.apiRoute}`),
-            axios.get(`/db/battleLogs/defense/${this.props.apiRoute}`),
+            axios.get(`/api/Kingfisher/siegeMatches/${this.props.apiRoute}`),
+            axios.get(`/api/Kingfisher/battleLogs/attack/${this.props.apiRoute}`),
+            axios.get(`/api/Kingfisher/battleLogs/defense/${this.props.apiRoute}`),
         ]).then(axios.spread((siegeMatch, attackLogs, defenseLogs) => {
             this.setState({
                 siegeID: siegeMatch.data.result.siege_id,
@@ -34,6 +35,16 @@ class Index extends React.Component {
                 defenseLogs: defenseLogs.data.result
             });
         }));
+    }
+
+    showAddWarsButton() {
+        if (this.state.siegeID) {
+            return (
+                <Button variant="primary" active href={`/aggregateWars/${this.state.siegeID}`} id="AddWarsButton">
+                    +
+                </Button>
+            );
+        }
     }
 
     render() {
@@ -48,6 +59,7 @@ class Index extends React.Component {
                           : <h4>Loading siege match data. . .</h4>
                     }
                 </MDBContainer>
+                { this.showAddWarsButton() }
                 { 
                     this.state.siegeGuilds.length === 3 ? 
                         <SiegeMatchHeader guildList={this.state.siegeGuilds} /> 
@@ -63,6 +75,7 @@ class Index extends React.Component {
                         <BattleLogTable logs={this.state.defenseLogs} /> 
                       : <div>Loading attack logs. . .</div>
                 }
+                
             </MDBContainer>
         );
     }

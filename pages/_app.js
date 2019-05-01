@@ -8,7 +8,7 @@ import './app.css'
 import GuildNavbar from "../src/components/GuildNavbar/GuildNavbar";
 import { MDBContainer } from 'mdbreact';
 
-// boilerplate from Next.js docs at https://github.com/zeit/next.js/
+// Boilerplate from Next.js docs at https://github.com/zeit/next.js/
 
 export default class MyApp extends App {
     static async getInitialProps({ Component, ctx }) {

@@ -5,15 +5,16 @@ module.exports = {
 
     // Computation functions
     getSuccessRateFromRecord(record) {
-        // based on format of records stored for players in this.getPlayerDataForWar
+        // Based on format of records stored for players in this.getPlayerDataForWar.
         const recordNumbers = record.split('-');
-        // avoid divide by 0 if player did not hit a certain guild
+        // Avoid divide by 0 if player did not hit a certain guild.
         if (recordNumbers[0] == '0' && recordNumbers[1] == '0') {
             return 0;
         }
         const successes = parseInt(recordNumbers[0], 10);
         const losses = parseInt(recordNumbers[1], 10);
-        return (successes / (successes + losses)).toFixed(4) * 100; // may round to 0 if not normalized to 0-100% value 
+        // May round to 0 if not normalized to 0-100% value.
+        return (successes / (successes + losses)).toFixed(4) * 100;
     },
 
     getTiesForBest(successRates, bestRate) {
@@ -26,7 +27,7 @@ module.exports = {
         return tiesForBest;
     },
 
-    // greedy alg for index of best success count
+    // Greedy alg for index of best success count.
     getHigherSuccessCount(ties, successCounts) {
         let bestIndex = ties[0];
         for (let tieIndex of ties) {
@@ -53,13 +54,13 @@ module.exports = {
         let bestRate = Math.max(...successRates);
         let ties = this.getTiesForBest(successRates, bestRate);
         if (ties.length > 1) {
-            let bestCountIndex = this.getHigherSuccessCount(ties, successCounts); // break tie with highest success count
-            // rates normalized to 100 to prevent rounding to 0, so this ensures correct winner
+            // Break tie with highest success count.
+            let bestCountIndex = this.getHigherSuccessCount(ties, successCounts);
+            // Rates normalized to 100 to prevent rounding to 0, so this ensures correct winner
             successRates[bestCountIndex] += 100;
             bestRate += 100;
         }
-        let description = '';
-        // need to check each individually to properly display opposing guild
+        // Need to check each individually to properly display opposing guild.
         if (bestRate == successRates[0]) {
             return `${playerData1.recordVsGuild1} vs. ${matchInfo1.opposing_guild_1}`;
         } else if (bestRate == successRates[1]) {
@@ -82,7 +83,7 @@ module.exports = {
         ];
 
         let maxSuccesses = Math.max(...successCounts);
-        // no need to break tie here because we only care about highest win count
+        // No need to break tie here because we only care about highest win count.
         if (maxSuccesses == successCounts[0]) {
             return `${playerData1.recordVsGuild1} vs. ${matchInfo1.opposing_guild_1}`;
         } else if (maxSuccesses == successCounts[1]) {
@@ -99,7 +100,8 @@ module.exports = {
     getWeekSuccessRate(playerData1, playerData2) {
         const totalSuccesses = playerData1.totalSuccesses + playerData2.totalSuccesses;
         const totalBattles = playerData1.totalBattles + playerData2.totalBattles;
-        return (totalSuccesses / totalBattles).toFixed(4); // total rates left in decimal form for table sorting
+        // Total rates left in decimal form for table sorting.
+        return (totalSuccesses / totalBattles).toFixed(4);
     },
 
     getPerformanceRating(playerData1, playerData2) {
@@ -112,15 +114,18 @@ module.exports = {
     filterWeeks(siegeMatchList) {
         let truncatedIDs = siegeMatchList.map((siegeMatch) => {
             let idString = siegeMatch.siege_id.toString();
-            let weekString = idString.substring(0,8); // first 8 chars of siegeID correspond to yyyymmww
+            // First 8 chars of siegeID correspond to yyyymmww
+            let weekString = idString.substring(0,8);
             return weekString;
         });
-        return _.uniq(truncatedIDs); // returns only uniq weeks
+        // Returns only uniq weeks.
+        return _.uniq(truncatedIDs);
     },
 
     getSiegeMatchSummary(siegeMatchData) {
         return siegeMatchData.guild_list.sort((guild1, guild2) => {
-            return guild1.points < guild2.points; // sort in descending order
+            // Sort in descending order.
+            return guild1.points < guild2.points;
         });
     },
 

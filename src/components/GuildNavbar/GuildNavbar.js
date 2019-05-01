@@ -16,7 +16,7 @@ class GuildNavbar extends Component {
     }
 
     componentWillMount() {
-        axios.get('/db/siegeMatches/id/list/recent').then((response) => {
+        axios.get('/api/Kingfisher/siegeMatches/id/list/recent').then((response) => {
             this.setState({
                 recentMatches: response.data.result
             });
@@ -30,10 +30,11 @@ class GuildNavbar extends Component {
                     <Navbar.Brand href="/">{this.props.guildName}</Navbar.Brand>
                     <Nav justify className="MainNav" >
                         <Nav.Link href="/">Latest War</Nav.Link>
-                        <Nav.Link href="/allWeeks">Data by Week</Nav.Link>
+                        <Nav.Link href="/aggregateWars">Aggregate Wars</Nav.Link>
                         <Nav.Link href="/siegeDecks">Siege Decks</Nav.Link>
                         <NavDropdown title="Recent Wars" id="basic-nav-dropdown">
-                            {   // does not worry about length of list first because rendered at _app level
+                            {   
+                                // Does not worry about length of list first because rendered at _app level.
                                 this.state.recentMatches.map((siegeMatch) => {
                                     const siegeID = siegeMatch.siege_id;
                                     const route = `/siegeMatch/${siegeID}`

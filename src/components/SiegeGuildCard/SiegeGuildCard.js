@@ -5,7 +5,7 @@ import './SiegeGuildCard.css';
 class SiegeGuildCard extends Component {
     render() {
         return (
-            // 20000 points is the cap, and there are no ties, so 20000 points indicates winner
+            // 20000 points is the cap, and there are no ties, so 20000 points indicates winner.
             <MDBCard className={'SiegeGuildCard ' + (this.props.guildInfo.points === 20000 ? 'Winner' : '')}>
                 <MDBCardBody>
                     <MDBCardTitle>

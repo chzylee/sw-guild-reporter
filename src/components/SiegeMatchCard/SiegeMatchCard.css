@@ -1,4 +1,5 @@
 .SiegeMatchCard {
+    margin: 16px;
     background-color: #212529;
     box-shadow: 
         0 0   8px  4px rgba(45, 100, 180, 0.275), 
