@@ -14,7 +14,7 @@ class AllWeeks extends React.Component {
     }
 
     componentWillMount() {
-        axios.get('/db/siegeMatches/id/list/all').then((response) => {
+        axios.get('/db/Kingfisher/siegeMatches/id/list/all').then((response) => {
             let siegeWeeks = SWDataUtils.filterWeeks(response.data.result);
             this.setState({
                 siegeWeeks: siegeWeeks

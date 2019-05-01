@@ -23,9 +23,9 @@ class Index extends React.Component {
 
     componentWillMount() {
         axios.all([
-            axios.get(`/db/siegeMatches/${this.props.apiRoute}`),
-            axios.get(`/db/battleLogs/attack/${this.props.apiRoute}`),
-            axios.get(`/db/battleLogs/defense/${this.props.apiRoute}`),
+            axios.get(`/db/Kingfisher/siegeMatches/${this.props.apiRoute}`),
+            axios.get(`/db/Kingfisher/battleLogs/attack/${this.props.apiRoute}`),
+            axios.get(`/db/Kingfisher/battleLogs/defense/${this.props.apiRoute}`),
         ]).then(axios.spread((siegeMatch, attackLogs, defenseLogs) => {
             this.setState({
                 siegeID: siegeMatch.data.result.siege_id,

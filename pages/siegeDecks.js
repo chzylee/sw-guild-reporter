@@ -11,7 +11,7 @@ class SiegeDecks extends React.Component {
     }
 
     componentWillMount() {
-        axios.get('/db/siegeDecks').then((response) => {
+        axios.get('/db/Kingfisher/siegeDecks').then((response) => {
             this.setState({
                 players: response.data.result,
             });
