@@ -78,7 +78,7 @@ app.prepare().then(() => {
 
     server.get('/api/:guildName/siegeMatches/id/:siegeID', (req, res) => {
         logger.info(`Received request for siege match data`);
-        let siegeList = ServerUtils.formatSiegeList(req.params.siegeIDs.split('+'));
+        let siegeList = ServerUtils.formatSiegeList(req.params.siegeID.split('+'));
         if (!ServerUtils.isValidSiegeList(siegeList)) {
             logger.warn('Received NaN siegeID'); // siegeList = list of siegeIDs
             res.status(400).send({ error: 'Given siegeID(s) need to be the numeric IDs separated by a + (e.g. 2019040301+2019040302)' });
