@@ -30,15 +30,12 @@ class AggregateWars extends React.Component {
     }
 
     selectSiegeMatch(siegeID) {
-        if (this.state.selected.length >= 6) {
-            // Do nothing if at/beyond limit (beyond should never occur).
-            return;
-        }
         let selectedSieges = this.state.selected;
         let siegeIndex = selectedSieges.indexOf(siegeID);
         if (siegeIndex > -1) {
             selectedSieges.splice(siegeIndex, 1);
-        } else {
+        } else if (selectedSieges.length >= 6) {
+            // Only add to list if fewer than 6 currently selected.
             selectedSieges.push(siegeID);
         }
 
