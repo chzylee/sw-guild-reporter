@@ -76,40 +76,22 @@ app.prepare().then(() => {
         }
     });
 
-    server.get('/api/:guildName/siegeMatches/id/:siegeIDs', (req, res) => {
+    server.get('/api/:guildName/siegeMatches/id/:siegeID', (req, res) => {
         logger.trace(`Received request for siege match data`);
         let siegeList = ServerUtils.formatSiegeList(req.params.siegeIDs.split('+'));
         if (!ServerUtils.isValidSiegeList(siegeList)) {
             logger.warn('Received NaN siegeID'); // siegeList = list of siegeIDs
             res.status(400).send({ error: 'Given siegeID(s) need to be the numeric IDs separated by a + (e.g. 2019040301+2019040302)' });
         } else {
-            if (siegeList.length === 1) {
-                const siegeID = siegeList[0];
-                logger.debug(`Querying siegeMatches for match with siege_id ${siegeID}`);
-                dbClient.findDataInCollection({ guild_name: req.params.guildName, siege_id: siegeID }, 'siegeMatches', (error, result) => {
-                    if (error != null || result[0] == undefined) {
-                        logger.error(`Error finding siege match with siege_id ${siegeID}`);
-                        res.status(500).send({ error: `Error finding siege match with siege_id ${siegeID}` });
-                    } else {
-                        logger.trace(`Successfully found siege match with siege_id ${siegeID}!`);
-                        res.send({ result: result[0] });
-                    }
-                });
-            } else {
-                logger.debug(`Querying siegeMatches for matches with siege_ids ${siegeList.toString()}`);
-                dbClient.findDataInCollection({ 
-                    guild_name: req.params.guildName, 
-                    $or: ServerUtils.getSiegeListConditions(siegeList)
-                }, 'siegeMatches', (error, result) => {
-                    if (error != null || result[0] == undefined) {
-                        logger.error(`Error finding siege match with siege_ids ${siegeList.toString()}`);
-                        res.status(500).send({ error: `Error finding siege match with siege_id ${siegeList.toString()}` });
-                    } else {
-                        logger.trace(`Successfully found siege match with siege_id ${siegeList.toString()}!`);
-                        res.send({ result: result });
-                    }
-                });
-            }
+            logger.debug(`Querying siegeMatches for match with siege_id ${siegeID}`);
+            dbClient.findDataInCollection({ guild_name: req.params.guildName, siege_id: siegeID }, 'siegeMatches', (error, result) => {
+                if (error != null || result[0] == undefined) {
+                    logger.error(`Error finding siege match with siege_id ${siegeID}`);
+                    res.status(500).send({ error: `Error finding siege match with siege_id ${siegeID}` });
+                }
+                logger.trace(`Successfully found siege match with siege_id ${siegeID}!`);
+                res.send({ result: result[0] });
+            });
         }
     });
 
@@ -175,50 +157,25 @@ app.prepare().then(() => {
         }
     });
 
-    server.get('/api/:guildName/battleLogs/:logType/id/:siegeIDs', (req, res) => {
-        logger.trace('Received request for battle log data');
-        let siegeList = ServerUtils.formatSiegeList(req.params.siegeIDs.split('+'));
-        if (!ServerUtils.isValidSiegeList(siegeList)) {
-            logger.warn('Received NaN siegeID'); // siegeList = list of siegeIDs
-            res.status(400).send({ error: 'Given siegeID(s) need to be the numeric IDs separated by a + (e.g. 2019040301+2019040302)' });
-        }
+    server.get('/api/:guildName/battleLogs/:logType/id/:siegeID', (req, res) => {
+        logger.trace('Received request for latest battle log data');
         if (!ServerUtils.isValidLogType(req.params.logType)) {
             logger.warn('Received invalid battle log type');
             res.status(400).send({ error: 'Given logType needs to be either \'attack\' or \'defense\'' });
             return;
         } else {
             const logType = ServerUtils.formatLogType(req.params.logType);
-            if (siegeList.length === 1) {
-                const siegeID = siegeList[0];
-                logger.debug(`Querying battleLogs for ${logType} log with siege_id ${siegeID}`);
-                dbClient.findDataInCollection({ 
-                    guild_name: req.params.guildName, 
-                    log_type: logType, siege_id: siegeID 
-                }, 'battleLogs', (error, result) => {
-                    if (error != null || result[0] == undefined) {
-                        logger.error(`Error finding battle log data for match with siege_id ${siegeID}`);
-                        res.status(500).send({ error: `Error finding battle log data for match with siege_id ${siegeID}` });
-                    } else {
-                        logger.trace(`Successfully found battle log data for match with siege_id ${siegeID}!`);
-                        res.send({ result: result[0] });
-                    }
-                });
-            } else {
-                logger.debug(`Querying battleLogs for ${logType} log with siege_ids ${siegeList.toString()}`);
-                dbClient.findDataInCollection({ 
-                    guild_name: req.params.guildName, 
-                    log_type: logType,
-                    $or: ServerUtils.getSiegeListConditions(siegeList)
-                }, 'battleLogs', (error, result) => {
-                    if (error != null || result[0] == undefined) {
-                        logger.error(`Error finding battle logs for matches with siege_ids ${siegeList.toString()}`);
-                        res.status(500).send({ error: `Error finding siege match with siege_id ${siegeList.toString()}` });
-                    } else {
-                        logger.trace(`Successfully found battle logs for matches with siege_id ${siegeList.toString()}!`);
-                        res.send({ result: result });
-                    }
-                });
-            }
+            const siegeID = parseInt(req.params.siegeID, 10); // params stored as strings
+            logger.debug(`Querying battleLogs for ${logType} log with siege_id ${siegeID}`);
+            dbClient.findDataInCollection({ guild_name: req.params.guildName, log_type: logType, siege_id: siegeID }, 'battleLogs', (error, result) => {
+                if (error != null || result[0] == undefined) {
+                    logger.error(`Error finding battle log data for match with siege_id ${siegeID}`);
+                    res.status(500).send({ error: `Error finding battle log data for match with siege_id ${siegeID}` });
+                } else {
+                    logger.trace(`Successfully found battle log data for match with siege_id ${siegeID}!`);
+                    res.send({ result: result[0] });
+                }
+            });
         }
     });
 
