@@ -34,7 +34,7 @@ class AggregateWars extends React.Component {
         let siegeIndex = selectedSieges.indexOf(siegeID);
         if (siegeIndex > -1) {
             selectedSieges.splice(siegeIndex, 1);
-        } else if (selectedSieges.length >= 6) {
+        } else if (selectedSieges.length < 6) {
             // Only add to list if fewer than 6 currently selected.
             selectedSieges.push(siegeID);
         }
