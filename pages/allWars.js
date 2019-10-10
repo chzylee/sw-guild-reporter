@@ -2,7 +2,7 @@ import { MDBContainer } from 'mdbreact';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Link from 'next/link';
 import axios from 'axios';
-import SWDisplayUtils from '../src/swDisplayUtils';
+import DisplayFormatter from '../src/displayFormatter';
 
 class AllWars extends React.Component {   
     constructor(props) {
@@ -20,6 +20,26 @@ class AllWars extends React.Component {
         });
     }
 
+    renderSiegeList()
+    {
+        return (
+            <ListGroup>
+                { 
+                    this.state.siegeMatches.length > 0 ?
+                        this.state.siegeMatches.map((siegeMatch) => {
+                            const siegeID = siegeMatch.siege_id;
+                            return (
+                                <ListGroup.Item>
+                                    <Link href={`/siegeMatch/${siegeID}`}>{DisplayFormatter.getSiegeDateTitle(siegeID)}</Link>
+                                </ListGroup.Item>
+                            );
+                        })
+                        : <ListGroup.Item>Loading war list. . .</ListGroup.Item>
+                } {/* End render war list */}
+            </ListGroup>
+        );
+    }
+
     render() {
         return (
             <MDBContainer fluid className="PageWrapper">
@@ -27,20 +47,7 @@ class AllWars extends React.Component {
                     <h1>All Siege Wars</h1>
                 </MDBContainer>
                 <MDBContainer className="ListWrapper">
-                    <ListGroup>
-                        { 
-                            this.state.siegeMatches.length > 0 ?
-                                this.state.siegeMatches.map((siegeMatch) => {
-                                    const siegeID = siegeMatch.siege_id;
-                                    return (
-                                        <ListGroup.Item>
-                                            <Link href={`/siegeMatch/${siegeID}`}>{SWDisplayUtils.getSiegeDateTitle(siegeID)}</Link>
-                                        </ListGroup.Item>
-                                    );
-                                })
-                              : <ListGroup.Item>Loading war list. . .</ListGroup.Item>
-                        } {/* End render war list */}
-                    </ListGroup>
+                    { this.renderSiegeList() }
                 </MDBContainer>
             </MDBContainer>
         )

@@ -1,6 +1,6 @@
-import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
+import { MDBContainer, MDBRow, MDBCol } from 'mdbreact';
 import axios from 'axios';
-import SWDisplayUtils from '../src/swDisplayUtils';
+import DisplayFormatter from '../src/displayFormatter';
 
 import AggregateBattleLogTable from "../src/components/BattleLogTable/AggregateBattleLogTable";
 import SiegeMatchCard from "../src/components/SiegeMatchCard/SiegeMatchCard";

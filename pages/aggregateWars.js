@@ -2,7 +2,7 @@ import { MDBContainer } from 'mdbreact';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Link from 'next/link';
 import axios from 'axios';
-import SWDisplayUtils from '../src/swDisplayUtils';
+import DisplayFormatter from '../src/displayFormatter';
 import { Button } from 'react-bootstrap';
 
 class AggregateWars extends React.Component {   
@@ -50,6 +50,45 @@ class AggregateWars extends React.Component {
         return selectedSieges.toString().replace(/,/g, '+');
     }
 
+    renderSelectedList() {
+        return (
+            <ListGroup>
+                { 
+                    this.state.selected.map((siegeID) => {
+                        return (
+                            <ListGroup.Item>
+                                {DisplayFormatter.getSiegeDateTitle(siegeID)}
+                            </ListGroup.Item>
+                        );
+                    })
+                } {/* End render war list */}
+            </ListGroup>
+        );
+    }
+
+    renderWarList() {
+        return (
+            <ListGroup>
+                { 
+                    this.state.siegeMatches.length > 0 ?
+                        this.state.siegeMatches.map((siegeMatch) => {
+                            const siegeID = siegeMatch.siege_id;
+                            return (
+                                <ListGroup.Item 
+                                    active={this.state.selected.includes(siegeID)}
+                                    onClick={() => this.selectSiegeMatch(siegeID)} 
+                                    key={siegeID}
+                                >
+                                    {DisplayFormatter.getSiegeDateTitle(siegeID)}
+                                </ListGroup.Item>
+                            );
+                        })
+                        : <ListGroup.Item>Loading war list. . .</ListGroup.Item>
+                } {/* End render war list */}
+            </ListGroup>
+        );
+    }
+
     render() {
         return (
             <MDBContainer fluid className="PageWrapper">
@@ -58,37 +97,10 @@ class AggregateWars extends React.Component {
                 </MDBContainer>
                 <MDBContainer id="SelectedList">
                     <h2>Selected Siege Wars</h2>
-                    <ListGroup>
-                        { 
-                            this.state.selected.map((siegeID) => {
-                                return (
-                                    <ListGroup.Item>
-                                        {SWDisplayUtils.getSiegeDateTitle(siegeID)}
-                                    </ListGroup.Item>
-                                );
-                            })
-                        } {/* End render war list */}
-                    </ListGroup>
+                    { this.renderSelectedList() }
                 </MDBContainer>
                 <MDBContainer className="ListWrapper">
-                    <ListGroup>
-                        { 
-                            this.state.siegeMatches.length > 0 ?
-                                this.state.siegeMatches.map((siegeMatch) => {
-                                    const siegeID = siegeMatch.siege_id;
-                                    return (
-                                        <ListGroup.Item 
-                                            active={this.state.selected.includes(siegeID)}
-                                            onClick={() => this.selectSiegeMatch(siegeID)} 
-                                            key={siegeID}
-                                        >
-                                            {SWDisplayUtils.getSiegeDateTitle(siegeID)}
-                                        </ListGroup.Item>
-                                    );
-                                })
-                              : <ListGroup.Item>Loading war list. . .</ListGroup.Item>
-                        } {/* End render war list */}
-                    </ListGroup>
+                    { this.renderWarList() }
                 </MDBContainer>
                 <Button href={`/aggregateSummary/${this.state.route}`} id="GoButton">Go</Button>
             </MDBContainer>

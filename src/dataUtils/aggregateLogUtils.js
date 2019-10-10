@@ -1,6 +1,3 @@
-const _ = require('lodash');
-const SWDisplayUtils = require('./swDisplayUtils');
-
 module.exports = {
 
     // Computation functions
@@ -38,6 +35,7 @@ module.exports = {
         return bestIndex;
     },
 
+    // PlayerData 1/2 corresponds to data for same player for 2 wars.
     getBestPerformance(playerData1, playerData2, matchInfo1, matchInfo2) {
         let successRates = [
             this.getSuccessRateFromRecord(playerData1.recordVsGuild1),
@@ -109,52 +107,5 @@ module.exports = {
         const weekSuccessRate = parseFloat(this.getWeekSuccessRate(playerData1, playerData2));
         const performanceRating = (totalBattles * weekSuccessRate) * 100;
         return performanceRating.toFixed(0);
-    },
-
-    filterWeeks(siegeMatchList) {
-        let truncatedIDs = siegeMatchList.map((siegeMatch) => {
-            let idString = siegeMatch.siege_id.toString();
-            // First 8 chars of siegeID correspond to yyyymmww
-            let weekString = idString.substring(0,8);
-            return weekString;
-        });
-        // Returns only uniq weeks.
-        return _.uniq(truncatedIDs);
-    },
-
-    getSiegeMatchSummary(siegeMatchData) {
-        return siegeMatchData.guild_list.sort((guild1, guild2) => {
-            // Sort in descending order.
-            return guild1.points < guild2.points;
-        });
-    },
-
-    getUniqueComps(siegeDecks) {
-        let allComps = [];
-        for (const player of siegeDecks) {
-            for (const deck of player.defenses) {
-                let deckMonsters = SWDisplayUtils.formatSiegeDeckMonsters(deck.monsters);
-                let comp = allComps.find((comp) => {
-                    return comp.monsters == deckMonsters;
-                });
-                if (comp === undefined) {
-                    allComps.push({
-                        leader: deck.monsters[1],
-                        monsters: deckMonsters,
-                        successes: deck.successes,
-                        fails: deck.fails,
-                        total: deck.total,
-                    });
-                } else {
-                    comp.successes += deck.successes;
-                    comp.fails += deck.fails;
-                    comp.total += deck.total;
-                }
-            }
-        }
-
-        return allComps.sort((comp1, comp2) => {
-            return comp1.monsters > comp2.monsters;
-        });
     }
 }

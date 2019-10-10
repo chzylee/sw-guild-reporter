@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { MDBContainer, MDBCol, MDBRow } from 'mdbreact';
 import { Tab, Tabs, ListGroup, Modal, Button } from 'react-bootstrap';
-import SWDataUtils from '../../swDataUtils';
-import SWDisplayUtils from '../../swDisplayUtils';
+import PlayerDeckUtils from '../../dataUtils/playerDeckUtils';
+import DisplayFormatter from '../..//displayFormatter';
 import './SiegeDeckPills.css';
 
 class SiegeDeckPills extends Component {
@@ -13,7 +13,7 @@ class SiegeDeckPills extends Component {
             key: 'player',
             showModal: new Array(props.players.length).fill(false),
         }
-        this.allGuildComps = SWDataUtils.getUniqueComps(props.players);
+        this.allGuildComps = PlayerDeckUtils.getUniqueComps(props.players);
 
         // simplified references for long accesses
         this.halfPlayers = Math.ceil(props.players.length / 2);
@@ -146,10 +146,10 @@ class SiegeDeckPills extends Component {
                                             player.defenses.map((defenseDeck) => {
                                                 return (
                                                     <MDBContainer className="PlayerDeck">
-                                                        <h4>{SWDisplayUtils.formatSiegeDeckMonsters(defenseDeck.monsters)}</h4>
+                                                        <h4>{DisplayFormatter.formatSiegeDeckMonsters(defenseDeck.monsters)}</h4>
                                                         <strong>Record: </strong>
                                                         <span>{defenseDeck.successes}-{defenseDeck.fails}</span>
-                                                        <span className="SuccessRate">({SWDisplayUtils.formatDeckSuccessRate(defenseDeck.success_rate)} win rate)</span>
+                                                        <span className="SuccessRate">({DisplayFormatter.formatDeckSuccessRate(defenseDeck.success_rate)} win rate)</span>
                                                     </MDBContainer>
                                                 )
                                             })

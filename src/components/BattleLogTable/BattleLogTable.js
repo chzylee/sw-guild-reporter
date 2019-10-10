@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { MDBDataTable, MDBContainer } from 'mdbreact';
-import SWDisplayUtils from '../../swDisplayUtils';
+import DisplayFormatter from '../..//displayFormatter';
 import './BattleLogTable.css';
 
 class BattleLogTable extends Component {
@@ -18,18 +18,18 @@ class BattleLogTable extends Component {
             if (logData.log_type == 'attack-logs') {
                 tableRows.push({
                     playerName: player,
-                    recordVsGuild1: SWDisplayUtils.formatRecordDescription(`${battleLogs[player].successes.vs_guild_1}-${lossesVsGuild1}`),
-                    recordVsGuild2: SWDisplayUtils.formatRecordDescription(`${battleLogs[player].successes.vs_guild_2}-${lossesVsGuild2}`),
-                    totalBattles: SWDisplayUtils.formatTotalBattles(battleLogs[player].attempts.total),
-                    successRate: SWDisplayUtils.formatPlayerSuccessRate(battleLogs[player].success_rate)
+                    recordVsGuild1: DisplayFormatter.formatRecordDescription(`${battleLogs[player].successes.vs_guild_1}-${lossesVsGuild1}`),
+                    recordVsGuild2: DisplayFormatter.formatRecordDescription(`${battleLogs[player].successes.vs_guild_2}-${lossesVsGuild2}`),
+                    totalBattles: DisplayFormatter.formatTotalBattles(battleLogs[player].attempts.total),
+                    successRate: DisplayFormatter.formatPlayerSuccessRate(battleLogs[player].success_rate)
                 });
             } else {
                 tableRows.push({
                     playerName: player,
-                    recordVsGuild1: SWDisplayUtils.formatRecordDescription(`${battleLogs[player].successes.vs_guild_1}-${lossesVsGuild1}`),
-                    recordVsGuild2: SWDisplayUtils.formatRecordDescription(`${battleLogs[player].successes.vs_guild_2}-${lossesVsGuild2}`),
-                    totalPlacements: SWDisplayUtils.formatTotalBattles(lossesVsGuild1 + lossesVsGuild2),
-                    successRate: SWDisplayUtils.formatPlayerSuccessRate(battleLogs[player].success_rate)
+                    recordVsGuild1: DisplayFormatter.formatRecordDescription(`${battleLogs[player].successes.vs_guild_1}-${lossesVsGuild1}`),
+                    recordVsGuild2: DisplayFormatter.formatRecordDescription(`${battleLogs[player].successes.vs_guild_2}-${lossesVsGuild2}`),
+                    totalPlacements: DisplayFormatter.formatTotalBattles(lossesVsGuild1 + lossesVsGuild2),
+                    successRate: DisplayFormatter.formatPlayerSuccessRate(battleLogs[player].success_rate)
                 });
             }
         }
@@ -38,7 +38,9 @@ class BattleLogTable extends Component {
     }
 
     getTableData(logData) {
-        return logData.log_type == 'attack-logs' ? {
+        let totalsLabel = DisplayFormatter.getTotalAttemptsLabel(logData.log_type);
+        let totalsField = DisplayFormatter.getTotalAttemptsField(logData.log_type);
+        return {
             columns: [
                 {
                     label: 'Player Name',
@@ -59,8 +61,8 @@ class BattleLogTable extends Component {
                     width: 100
                 },
                 {
-                    label: 'Total Battles',
-                    field: 'totalBattles',
+                    label: totalsLabel,
+                    field: totalsField,
                     sort: 'desc',
                     width: 80
                 },
@@ -72,42 +74,7 @@ class BattleLogTable extends Component {
                 },
             ],
             rows: this.formatLogsForTable(logData)
-        } :
-        {
-            columns: [
-                {
-                    label: 'Player Name',
-                    field: 'playerName',
-                    sort: 'desc',
-                    width: 200
-                },
-                {
-                    label: `W-L vs ${logData.match_info.opposing_guild_1}`,
-                    field: 'recordVsGuild1',
-                    sort: 'desc',
-                    width: 100
-                },
-                {
-                    label: `W-L vs ${logData.match_info.opposing_guild_2}`,
-                    field: 'recordVsGuild2',
-                    sort: 'desc',
-                    width: 100
-                },
-                {
-                    label: 'Total Placements',
-                    field: 'totalPlacements',
-                    sort: 'desc',
-                    width: 80
-                },
-                {
-                    label: 'Success Rate',
-                    field: 'successRate',
-                    sort: 'desc',
-                    width: 120
-                },
-            ],
-            rows: this.formatLogsForTable(logData)
-        }
+        };
     }
 
     showPlacementsNote(logType) {
@@ -121,10 +88,10 @@ class BattleLogTable extends Component {
         if (this.props.logs.match_info) {
             return (
                 <MDBContainer fluid className="BattleLogTable">
-                    <h2>{SWDisplayUtils.formatLogType(this.props.logs.log_type)} Logs</h2>
+                    <h2>{DisplayFormatter.formatLogType(this.props.logs.log_type)} Logs</h2>
                     <h4>Total Success Rate:  
                         <span className="numberSpan">
-                            {SWDisplayUtils.getGuildSuccessRateLabel(this.props.logs.battle_logs)}
+                            {DisplayFormatter.getGuildSuccessRateLabel(this.props.logs.battle_logs)}
                         </span>
                     </h4>
                     { this.showPlacementsNote(this.props.logs.log_type) }
