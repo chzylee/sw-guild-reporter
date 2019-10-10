@@ -237,10 +237,6 @@ app.prepare().then(() => {
     server.get('/aggregateWars/:siegeIDs', (req, res) => {
         logger.info(`Received get request to /aggregateWars/${req.params.siegeIDs}`);
         let siegeList = ServerUtils.formatSiegeList(req.params.siegeIDs.split('+'));
-        if (siegeList.length == 1) {
-            // Redirect to show info for 1 match.
-            res.redirect(`/siegeMatch/${siegeList[0]}`);
-        }
         if (!ServerUtils.isValidSiegeList(siegeList)) {
             logger.warn('Received NaN siegeID');
             res.status(400).send({ error: 'Given siegeID(s) (max 6) need to be the numeric IDs separated by a + (e.g. 2019040301+2019040302)' });
@@ -252,6 +248,10 @@ app.prepare().then(() => {
     server.get('/aggregateSummary/:siegeIDs', (req, res) => {
         logger.info(`Received get request to /aggregateSummary/${req.params.siegeIDs}`);
         let siegeList = ServerUtils.formatSiegeList(req.params.siegeIDs.split('+'));
+        if (siegeList.length == 1) {
+            // Redirect to show info for 1 match.
+            res.redirect(`/siegeMatch/${siegeList[0]}`);
+        }
         if (!ServerUtils.isValidSiegeList(siegeList)) {
             logger.warn('Received NaN siegeID');
             res.status(400).send({ error: 'Given siegeID(s) need to be the numeric IDs separated by a + (e.g. 2019040301+2019040302)' });
