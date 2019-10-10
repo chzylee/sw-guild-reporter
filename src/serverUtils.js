@@ -45,6 +45,9 @@ module.exports = {
     },
 
     isValidSiegeList(siegeList) {
+        if (siegeList.length < 1 || siegeList.length > 6) {
+            return false;
+        }
         for (const siegeID of siegeList) {
             if (isNaN(siegeID)) {
                 return false;

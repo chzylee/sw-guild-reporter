@@ -70,7 +70,7 @@ class AggregateSummary extends React.Component {
                             }
                         </MDBRow>
                     </MDBContainer>
-                    {/* { 
+                    { 
                         this.state.attackLogs.length > 0 ?
                             <AggregateBattleLogTable logs={this.state.attackLogs}/>
                           : <div>Loading attack log data. . .</div>
@@ -79,7 +79,7 @@ class AggregateSummary extends React.Component {
                         this.state.defenseLogs.length > 0 ?
                             <AggregateBattleLogTable logs={this.state.defenseLogs}/>
                           : <div>Loading defense log data. . .</div>
-                    } */}
+                    }
                 </MDBContainer>
             );
         }

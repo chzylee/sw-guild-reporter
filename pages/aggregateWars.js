@@ -1,6 +1,5 @@
 import { MDBContainer } from 'mdbreact';
 import ListGroup from 'react-bootstrap/ListGroup';
-import Link from 'next/link';
 import axios from 'axios';
 import DisplayFormatter from '../src/displayFormatter';
 import { Button } from 'react-bootstrap';
@@ -31,6 +30,10 @@ class AggregateWars extends React.Component {
     }
 
     selectSiegeMatch(siegeID) {
+        if (this.state.selected.length >= 6) {
+            // Do nothing if at/beyond limit (beyond should never occur).
+            return;
+        }
         let selectedSieges = this.state.selected;
         let siegeIndex = selectedSieges.indexOf(siegeID);
         if (siegeIndex > -1) {
@@ -89,6 +92,14 @@ class AggregateWars extends React.Component {
         );
     }
 
+    renderLimitWarning() {
+        if (this.state.selected.length >= 6) {
+            return (
+                <h4>Can only aggregate up to 6 wars</h4>
+            );
+        }
+    }
+
     render() {
         return (
             <MDBContainer fluid className="PageWrapper">
@@ -98,6 +109,7 @@ class AggregateWars extends React.Component {
                 <MDBContainer id="SelectedList">
                     <h2>Selected Siege Wars</h2>
                     { this.renderSelectedList() }
+                    { this.renderLimitWarning() }
                 </MDBContainer>
                 <MDBContainer className="ListWrapper">
                     { this.renderWarList() }

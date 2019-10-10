@@ -47,4 +47,15 @@ describe('ServerUtils', () => {
         expect(isMonthValid).toBe(false);
         expect(isWeekValid).toBe(false);
     });
+
+    it('should validate siege list by confirming it is list of numeric IDs and has 1-6 IDs', () => {
+        let siegeIDs = [2019040301, 2019040302, 2019040401, 2019040402, 2019050101, 2019050102];
+        let noIDs = [];
+        // Values do not matter.
+        let tooManyIDs = [
+            2019040301, 2019040302, 2019040401, 2019040402, 2019050101, 2019050102, 2019050201, 2019050202];
+        expect(ServerUtils.isValidSiegeList(siegeIDs)).toBe(true);
+        expect(ServerUtils.isValidSiegeList(noIDs)).toBe(false);
+        expect(ServerUtils.isValidSiegeList(tooManyIDs)).toBe(false);
+    });
 });
