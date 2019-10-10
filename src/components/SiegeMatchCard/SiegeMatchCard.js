@@ -13,7 +13,7 @@ class SiegeMatchCard extends Component {
                 <MDBCardBody>
                     <MDBCardTitle>
                         <Link href={`/siegeMatch/${this.props.siegeMatchData.match_info.siege_id}`}>
-                            {SWDisplayUtils.getSiegeMatchTitle(this.props.siegeMatchData)}
+                            {SWDisplayUtils.getSiegeDateTitle(this.props.siegeMatchData.siege_id)}
                         </Link>
                     </MDBCardTitle>
                     {

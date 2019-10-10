@@ -21,7 +21,7 @@ html {
 
 .Title {
     text-align: center;
-    width: 50%;
+    width: 100%;
     margin-bottom: 18px;
 }
 
@@ -66,4 +66,47 @@ html {
 
 .DeckContainer {
     width: 75%;
+}
+
+#AddWarsButton {
+    position: fixed;
+    bottom: 24px;
+    right: 32px;
+    display: block;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    padding: 6px 0;
+    line-height: 36px;
+    text-align: center;
+    font-size: 2.5em;
+
+    box-shadow: 
+        0 4px 8px  4px rgba(0, 0, 0, 0.375), 
+        0 4px 10px 8px rgba(0, 0, 0, 0.215);
+}
+
+#SelectedList {
+    width: 23%;
+    position: fixed;
+    top: 50%;
+    transform: translate(0, -50%);
+    left: 6%;
+    text-align: center;
+}
+
+#GoButton {
+    position: fixed;
+    top: 50%;
+    transform: translate(0, -50%);
+    right: 18%;
+    display: block;
+    border-radius: 40%;
+    line-height: 36px;
+    text-align: center;
+    font-size: 2.5em;
+
+    box-shadow: 
+        0 4px 8px  4px rgba(0, 0, 0, 0.375), 
+        0 4px 10px 8px rgba(0, 0, 0, 0.215);
 }

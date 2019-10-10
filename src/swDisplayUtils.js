@@ -19,51 +19,52 @@ module.exports = {
 
     getSiegeDateTitle(siegeID) {
         let idString = siegeID.toString();
-        // based on deduced format of siege_id numbers
+        // Based on deduced format of siege_id numbers.
         let year = idString.substring(0, 4);
         let month = this.getMonthName(idString.substring(4, 6));
-        let week = idString.substring(7, 8); // no month has double digit number of weeks
-        let warNumber = idString.substring(9); // 1 or 2 corresponding whether it is war 1/2 or 2/2 of the 2 weekly wars
-        return `${month} ${year}, Week ${week}, War ${warNumber}`; // most players refer to "matches" as wars (following in-game text)
+        // No month has double digit number of weeks.
+        let week = idString.substring(7, 8);
+        // 1 or 2 corresponding whether it is war 1/2 or 2/2 of the 2 weekly wars.
+        let warNumber = idString.substring(9);
+        // Most players refer to "matches" as wars (following in-game text).
+        return `${month} ${year}, Week ${week}, War ${warNumber}`;
     },
 
     getSiegeDateLabel(siegeID) {
         let idString = siegeID.toString();
         let year = idString.substring(0, 4);
         let month = idString.substring(4, 6);
-        let week = idString.substring(7, 8); // no month has double digit number of weeks
+        // No month has double digit number of weeks.
+        let week = idString.substring(7, 8);
         let warNumber = idString.substring(9);
-        return `${month}/${year} week ${week}: ${warNumber}/2`; // most players refer to "matches" as wars (following in-game text)
-    },
-
-    getSiegeWeekTitle(week) {
-        let weekString = week.toString();
-        // week has format yyyymmdd
-        let year = weekString.substring(0, 4);
-        let month = this.getMonthName(weekString.substring(4, 6));
-        let weekNumber = weekString.substring(7); // no month has double digit number of weeks
-        return `Wars for Week ${weekNumber} of ${month} ${year}`;
+        // Most players refer to "matches" as wars (following in-game text).
+        return `${month}/${year} week ${week}: ${warNumber}/2`;
     },
 
     getGuildSuccessRateLabel(guildBattleLogs) {
         let totalSuccesses = guildBattleLogs.successes.total;
         let totalAttempts = guildBattleLogs.attempts.total;
         let totalRate = (totalSuccesses / totalAttempts).toFixed(4) * 100;
-        let totalRateString = totalRate.toString().substring(0,5) + '%'; // format to xx.xx% or 100.0%
-        return ` ${totalSuccesses}/${totalAttempts}  (${totalRateString})`; // leading space to separate from preceding text
+        // Format to xx.xx% or 100.0%.
+        let totalRateString = totalRate.toString().substring(0,5) + '%';
+        // Leading space to separate from preceding text.
+        return ` ${totalSuccesses}/${totalAttempts}  (${totalRateString})`;
     },
 
-    getWeekSuccessRateLabel(weekLogList) {
-        let totalSuccesses = weekLogList[0].battle_logs.successes.total + weekLogList[1].battle_logs.successes.total;
-        let totalAttempts = weekLogList[0].battle_logs.attempts.total + weekLogList[1].battle_logs.attempts.total;
+    getTotalSuccessRateLabel(logList) {
+        let totalSuccesses = logList[0].battle_logs.successes.total + logList[1].battle_logs.successes.total;
+        let totalAttempts = logList[0].battle_logs.attempts.total + logList[1].battle_logs.attempts.total;
         let totalRate = (totalSuccesses / totalAttempts).toFixed(4) * 100;
-        let totalRateString = totalRate.toString().substring(0,5) + '%'; // format to xx.xx% or 100.0%
-        return ` ${totalSuccesses}/${totalAttempts}  (${totalRateString})`; // leading space to separate from preceding text
+        // Format to xx.xx% or 100.0%.
+        let totalRateString = totalRate.toString().substring(0,5) + '%';
+        // Leading space to separate from preceding text.
+        return ` ${totalSuccesses}/${totalAttempts}  (${totalRateString})`;
     },
 
     formatTotalBattles(battleCount) {
         if (battleCount < 10) {
-            return ` ${battleCount}`; // ensures proper ordering when sorted as strings in table
+            // Ensures proper ordering when sorted as strings in table.
+            return ` ${battleCount}`;
         } else {
             return battleCount.toString();
         }
@@ -79,7 +80,7 @@ module.exports = {
 
     formatPlayerSuccessRate(successRateDecimal) {
         let successRateString = successRateDecimal.toString();
-        // using regex from post here: https://stackoverflow.com/questions/4187146/truncate-number-to-two-decimal-places-without-rounding
+        // Using regex from post here: https://stackoverflow.com/questions/4187146/truncate-number-to-two-decimal-places-without-rounding
         var truncatedDecimals = successRateString.match(/^-?\d+(?:\.\d{0,2})?/)[0];
         if (truncatedDecimals) {
             return successRateString.match(/^-?\d+(?:\.\d{0,2})?/g)[0];
@@ -89,7 +90,7 @@ module.exports = {
     },
     
     formatRecordDescription(description) {
-        // MDBReact DataTable sorts by string, so this works around '10' < '9'
+        // MDBReact DataTable sorts by string, so this works around '10' < '9'.
         return description.replace('10-0', 'Perfect 10-0');
     },
 
@@ -112,8 +113,9 @@ module.exports = {
     },
 
     formatSiegeDeckMonsters(deckMonsters) {
-        let deckMonstersLabel = `${deckMonsters[0]} (L)`; // first monsters is leader and guaranteed to be at least 1
-        // number of monsters can be from 1-3
+        // First monsters is leader and guaranteed to be at least 1.
+        let deckMonstersLabel = `${deckMonsters[0]} (L)`;
+        // Number of monsters can be from 1-3.
         for (let monsterIndex = 1; monsterIndex < deckMonsters.length; monsterIndex += 1) {
             deckMonstersLabel += ` ${deckMonsters[monsterIndex]}`;
         }

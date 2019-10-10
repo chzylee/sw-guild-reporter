@@ -13,7 +13,7 @@ class AllWars extends React.Component {
     }
 
     componentWillMount() {
-        axios.get('/db/siegeMatches/id/list/all').then((response) => {
+        axios.get('/api/Kingfisher/siegeMatches/id/list/all').then((response) => {
             this.setState({
                 siegeMatches: response.data.result
             });

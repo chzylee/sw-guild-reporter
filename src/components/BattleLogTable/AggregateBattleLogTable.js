@@ -4,12 +4,12 @@ import SWDataUtils from '../../swDataUtils';
 import SWDisplayUtils from '../../swDisplayUtils';
 import './BattleLogTable.css';
 
-class WeekBattleLogTable extends Component {
+class AggregateBattleLogTable extends Component {
     getPlayerLogsForMatch(battleLogs) {
         let playerLogs = {};
 
         for (const player in battleLogs) {
-            // guild totals set in same section of object as players
+            // Guild totals set in same section of object as players.
             if (player == 'successes' || player == 'attempts') {
                 continue;
             }
@@ -17,13 +17,15 @@ class WeekBattleLogTable extends Component {
             let lossesVsGuild1 = battleLogs[player].attempts.vs_guild_1 - battleLogs[player].successes.vs_guild_1;
             let lossesVsGuild2 = battleLogs[player].attempts.vs_guild_2 - battleLogs[player].successes.vs_guild_2;
             playerLogs[player] = {
+                playerName: player,
                 recordVsGuild1: `${battleLogs[player].successes.vs_guild_1}-${lossesVsGuild1}`,
                 recordVsGuild2: `${battleLogs[player].successes.vs_guild_2}-${lossesVsGuild2}`,
-                // rewrap success counts here because need this to get best performance efficiently
+                // Rewrap success counts here because need this to get best performance efficiently.
                 successesVsGuild1: battleLogs[player].successes.vs_guild_1,
                 successesVsGuild2: battleLogs[player].successes.vs_guild_2,
                 totalSuccesses: battleLogs[player].successes.total,
                 totalBattles: battleLogs[player].attempts.total,
+                successRate: SWDisplayUtils.formatPlayerSuccessRate(battleLogs[player].success_rate)
             };
         }
 
@@ -57,14 +59,14 @@ class WeekBattleLogTable extends Component {
         return totals;
     }
 
-    formatWeekLogsForTable(weekLogList) {
-        const log1 = weekLogList[0];
-        const log2 = weekLogList[1];
-        const battleLogs1 = log1.battle_logs;
-        const battleLogs2 = log2.battle_logs;
-        let playerLogs1 = this.getPlayerLogsForMatch(battleLogs1);
-        let playerLogs2 = this.getPlayerLogsForMatch(battleLogs2);
-        return this.mergePlayerLogs(playerLogs1, playerLogs2, log1.match_info, log2.match_info);
+    formatAllLogsForTable(logList) {
+        let playerLogs = [];
+        let matchInfoList = [];
+        for (const matchLog of logList) {
+            playerLogs.push(this.getPlayerLogsForMatch(matchLog.battle_logs));
+            matchInfoList.push(matchLog.match_info);
+        }
+        return this.mergePlayerLogs(playerLogs, matchInfoList);
     }
 
     getTableData(weekLogList) {
@@ -107,18 +109,18 @@ class WeekBattleLogTable extends Component {
                     width: 120
                 },
             ],
-            rows: this.formatWeekLogsForTable(weekLogList)
+            rows: this.formatAllLogsForTable(weekLogList)
         }
     }
 
     render() {
-        if (this.props.logs.length == 2) { // need logs for both wars of the week
+        if (this.props.logs.length >= 2) { // need logs for both wars of the week
             return (
                 <MDBContainer fluid className="BattleLogTable">
                     <h2>{SWDisplayUtils.formatLogType(this.props.logs[0].log_type)} Logs</h2>
                     <h4>Total Success Rate:  
                         <span className="numberSpan">
-                            {SWDisplayUtils.getWeekSuccessRateLabel(this.props.logs)}
+                            {SWDisplayUtils.getTotalSuccessRateLabel(this.props.logs)}
                         </span>
                     </h4>
                     <MDBDataTable 
@@ -133,11 +135,11 @@ class WeekBattleLogTable extends Component {
         } else {
             return (
                 <MDBContainer>
-                    <div>Need logs for 2 wars to show data</div>
+                    <div>Need logs for at least 2 wars to show data</div>
                 </MDBContainer>
             )
         }
     }
 }
 
-export default WeekBattleLogTable;
+export default AggregateBattleLogTable;
