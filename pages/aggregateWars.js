@@ -5,6 +5,7 @@ import DisplayFormatter from '../src/displayFormatter';
 import { Button } from 'react-bootstrap';
 
 class AggregateWars extends React.Component {   
+
     constructor(props) {
         super(props);
         this.state = {
@@ -12,6 +13,8 @@ class AggregateWars extends React.Component {
             selected: [],
             route: '',
         }
+        // Currently set at 6 (3 weeks of wars).
+        this.selectionLimit = 6;
     }
 
     static async getInitialProps({ query }) {
@@ -34,8 +37,7 @@ class AggregateWars extends React.Component {
         let siegeIndex = selectedSieges.indexOf(siegeID);
         if (siegeIndex > -1) {
             selectedSieges.splice(siegeIndex, 1);
-        } else if (selectedSieges.length < 6) {
-            // Only add to list if fewer than 6 currently selected.
+        } else if (selectedSieges.length < this.selectionLimit) {
             selectedSieges.push(siegeID);
         }
 
@@ -90,9 +92,9 @@ class AggregateWars extends React.Component {
     }
 
     renderLimitWarning() {
-        if (this.state.selected.length >= 6) {
+        if (this.state.selected.length >= this.selectionLimit) {
             return (
-                <h4>Can only aggregate up to 6 wars</h4>
+                <h4 className="Note">Aggregation limit is {this.selectionLimit} wars</h4>
             );
         }
     }

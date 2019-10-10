@@ -68,6 +68,10 @@ html {
     width: 75%;
 }
 
+.Note {
+    margin: 16px;
+}
+
 #AddWarsButton {
     position: fixed;
     bottom: 24px;
