@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { MDBDataTable, MDBContainer } from 'mdbreact';
-import SWDataUtils from '../../swDataUtils';
-import SWDisplayUtils from '../../swDisplayUtils';
+import AggregateLogUtils from '../../dataUtils/aggregateLogUtils';
+import DisplayFormatter from '../..//displayFormatter';
 import './BattleLogTable.css';
 
 class AggregateBattleLogTable extends Component {
@@ -25,7 +25,7 @@ class AggregateBattleLogTable extends Component {
                 successesVsGuild2: battleLogs[player].successes.vs_guild_2,
                 totalSuccesses: battleLogs[player].successes.total,
                 totalBattles: battleLogs[player].attempts.total,
-                successRate: SWDisplayUtils.formatPlayerSuccessRate(battleLogs[player].success_rate)
+                successRate: DisplayFormatter.formatPlayerSuccessRate(battleLogs[player].success_rate)
             };
         }
 
@@ -39,19 +39,19 @@ class AggregateBattleLogTable extends Component {
             const playerData1 = playerLogs1[player];
             if (playerLogs2[player]) {
                 const playerData2 = playerLogs2[player];
-                const bestPerformance = SWDataUtils.getBestPerformance(playerData1, playerData2, matchInfo1, matchInfo2);
-                const mostSuccesses = SWDataUtils.getHighestSuccessPerformance(playerData1, playerData2, matchInfo1, matchInfo2);
+                const bestPerformance = AggregateLogUtils.getBestPerformance(playerData1, playerData2, matchInfo1, matchInfo2);
+                const mostSuccesses = AggregateLogUtils.getHighestSuccessPerformance(playerData1, playerData2, matchInfo1, matchInfo2);
                 const totalBattles = playerData1.totalBattles + playerData2.totalBattles;
-                const successRate = SWDataUtils.getWeekSuccessRate(playerData1, playerData2);
-                const successRateString = SWDisplayUtils.formatPlayerSuccessRate(successRate);
-                const performanceRating = SWDataUtils.getPerformanceRating(playerData1, playerData2)
+                const successRate = AggregateLogUtils.getWeekSuccessRate(playerData1, playerData2);
+                const successRateString = DisplayFormatter.formatPlayerSuccessRate(successRate);
+                const performanceRating = AggregateLogUtils.getPerformanceRating(playerData1, playerData2)
                 totals.push({
                     playerName: player,
-                    bestPerformance: SWDisplayUtils.formatRecordDescription(bestPerformance),
-                    mostSuccesses: SWDisplayUtils.formatRecordDescription(mostSuccesses),
-                    totalBattles: SWDisplayUtils.formatTotalBattles(totalBattles),
+                    bestPerformance: DisplayFormatter.formatRecordDescription(bestPerformance),
+                    mostSuccesses: DisplayFormatter.formatRecordDescription(mostSuccesses),
+                    totalBattles: DisplayFormatter.formatTotalBattles(totalBattles),
                     successRate: successRateString,
-                    performanceRating: SWDisplayUtils.formatPerformanceRating(performanceRating),
+                    performanceRating: DisplayFormatter.formatPerformanceRating(performanceRating),
                 });
             }
         }
@@ -117,10 +117,10 @@ class AggregateBattleLogTable extends Component {
         if (this.props.logs.length >= 2) { // need logs for both wars of the week
             return (
                 <MDBContainer fluid className="BattleLogTable">
-                    <h2>{SWDisplayUtils.formatLogType(this.props.logs[0].log_type)} Logs</h2>
+                    <h2>{DisplayFormatter.formatLogType(this.props.logs[0].log_type)} Logs</h2>
                     <h4>Total Success Rate:  
                         <span className="numberSpan">
-                            {SWDisplayUtils.getTotalSuccessRateLabel(this.props.logs)}
+                            {DisplayFormatter.getTotalSuccessRateLabel(this.props.logs)}
                         </span>
                     </h4>
                     <MDBDataTable 

@@ -1,6 +1,6 @@
-import { MDBContainer } from "mdbreact";
+import { MDBContainer } from 'mdbreact';
 import axios from 'axios';
-import SWDisplayUtils from '../src/swDisplayUtils';
+import DisplayFormatter from '../src/displayFormatter';
 
 import SiegeMatchHeader from '../src/components/SiegeMatchHeader/SiegeMatchHeader';
 import BattleLogTable from '../src/components/BattleLogTable/BattleLogTable';
@@ -18,6 +18,7 @@ class Index extends React.Component {
     }
 
     static async getInitialProps({ query }) {
+        // Get latest siege match if not given one.
         const apiRoute = query.siegeMatchID ? `id/${query.siegeMatchID}` : 'latest';
         return { apiRoute };
     }
@@ -40,7 +41,12 @@ class Index extends React.Component {
     showAddWarsButton() {
         if (this.state.siegeID) {
             return (
-                <Button variant="primary" active href={`/aggregateWars/${this.state.siegeID}`} id="AddWarsButton">
+                <Button 
+                    variant="primary" 
+                    active 
+                    href={`/aggregateWars/${this.state.siegeID}`} 
+                    id="AddWarsButton"
+                >
                     +
                 </Button>
             );
@@ -55,25 +61,25 @@ class Index extends React.Component {
                     <h1>Siege War Data</h1>
                     { 
                         this.state.siegeID ? 
-                            <h3>{SWDisplayUtils.getSiegeDateTitle(this.state.siegeID)}</h3> 
-                          : <h4>Loading siege match data. . .</h4>
+                            <h3>{DisplayFormatter.getSiegeDateTitle(this.state.siegeID)}</h3> :
+                            <h4>Loading siege match data. . .</h4>
                     }
                 </MDBContainer>
                 { this.showAddWarsButton() }
                 { 
                     this.state.siegeGuilds.length === 3 ? 
-                        <SiegeMatchHeader guildList={this.state.siegeGuilds} /> 
-                      : <div>Loading guild info. . .</div>
+                        <SiegeMatchHeader guildList={this.state.siegeGuilds} /> :
+                        <div>Loading guild info. . .</div>
                 }
                 { 
                     this.state.attackLogs ? 
-                        <BattleLogTable logs={this.state.attackLogs} /> 
-                      : <div>Loading attack logs. . .</div>
+                        <BattleLogTable logs={this.state.attackLogs} /> :
+                        <div>Loading attack logs. . .</div>
                 }
                 { 
                     this.state.defenseLogs ? 
-                        <BattleLogTable logs={this.state.defenseLogs} /> 
-                      : <div>Loading attack logs. . .</div>
+                        <BattleLogTable logs={this.state.defenseLogs} /> :
+                        <div>Loading attack logs. . .</div>
                 }
                 
             </MDBContainer>

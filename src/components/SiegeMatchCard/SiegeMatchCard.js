@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Link from 'next/link';
 import { MDBCard, MDBCardBody, MDBCardText, MDBCardTitle, MDBRow, MDBContainer, MDBCol } from 'mdbreact';
-import SWDataUtils from '../../swDataUtils';
-import SWDisplayUtils from '../../swDisplayUtils';
+import SiegeMatchUtils from '../../dataUtils/siegeMatchUtils';
+import DisplayFormatter from '../..//displayFormatter';
 
 import './SiegeMatchCard.css';
 
@@ -13,11 +13,11 @@ class SiegeMatchCard extends Component {
                 <MDBCardBody>
                     <MDBCardTitle>
                         <Link href={`/siegeMatch/${this.props.siegeMatchData.match_info.siege_id}`}>
-                            {SWDisplayUtils.getSiegeDateTitle(this.props.siegeMatchData.siege_id)}
+                            {DisplayFormatter.getSiegeDateTitle(this.props.siegeMatchData.siege_id)}
                         </Link>
                     </MDBCardTitle>
                     {
-                        SWDataUtils.getSiegeMatchSummary(this.props.siegeMatchData).map((guild) => {
+                        SiegeMatchUtils.getSiegeMatchSummary(this.props.siegeMatchData).map((guild) => {
                             return (
                                 <MDBContainer className="GuildScoreSummary">
                                     <MDBRow>
@@ -27,7 +27,7 @@ class SiegeMatchCard extends Component {
                                             </MDBCardText>
                                         </MDBCol>
                                             <MDBCardText className="ScoreSummary">
-                                                {guild.points}, used {SWDisplayUtils.getGuildAttackSummary(guild)} attacks
+                                                {guild.points}, used {DisplayFormatter.getGuildAttackSummary(guild)} attacks
                                             </MDBCardText>
                                     </MDBRow>
                                 </MDBContainer>

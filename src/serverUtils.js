@@ -4,7 +4,7 @@ module.exports = {
             logger.error(`Error inserting ${dataLabel} data`);
             res.status(500).send({ error: `Error inserting ${dataLabel} data` });
         } else {
-            logger.trace(`Successfully inserted ${dataLabel} data!`);
+            logger.info(`Successfully inserted ${dataLabel} data!`);
             res.send({ result: result });
         }
     },
@@ -14,7 +14,7 @@ module.exports = {
             logger.error(`Error finding ${dataLabel} data`);
             res.status(500).send({ error: `Error finding ${dataLabel} data` });
         } else {
-            logger.trace(`Successfully found ${dataLabel} data!`);
+            logger.info(`Successfully found ${dataLabel} data!`);
             res.send({ result: result });
         }
     },

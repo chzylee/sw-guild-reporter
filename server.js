@@ -15,7 +15,7 @@ log4js.configure({
     }
 });
 
-// starter server vars from (https://medium.com/@mandra.jakub/materialize-your-next-js-project-with-mdbootstrap-for-react-4301d40737d9)
+// Starter server vars from (https://medium.com/@mandra.jakub/materialize-your-next-js-project-with-mdbootstrap-for-react-4301d40737d9)
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
@@ -32,7 +32,7 @@ app.prepare().then(() => {
 
     // Siege Match database endpoints
     server.post('/api/:guildName/siegeMatches', (req, res) => {
-        logger.trace('Received siege match data');
+        logger.info('Received siege match data');
         dbClient.updateDataInCollection({ 
             guild_name: req.params.guildName, 
             siege_id: req.body.match_info.siege_id 
@@ -42,21 +42,21 @@ app.prepare().then(() => {
     });
 
     server.get('/api/:guildName/siegeMatches', (req, res) => {
-        logger.trace('Received request for siege match data');
+        logger.info('Received request for siege match data');
         dbClient.showDataInCollection(req.params.guildName, 'siegeMatches', (error, result) => {
             ServerUtils.sendSimpleQueryResponse(error, result, 'siege match', logger, res);
         });
     });
 
     server.get('/api/:guildName/siegeMatches/latest', (req, res) => {
-        logger.trace('Received request for latest siege match data');
+        logger.info('Received request for latest siege match data');
         dbClient.getMostRecentSiegeMatch(req.params.guildName, (error, result) => {
             ServerUtils.sendSimpleQueryResponse(error, result, 'siege match', logger, res);
         });
     });
 
     server.get('/api/:guildName/siegeMatches/id/list/:count', (req, res) => {
-        logger.trace(`Received request for ${req.params.count} siege match IDs`);
+        logger.info(`Received request for ${req.params.count} siege match IDs`);
         const limit = ServerUtils.getLimitForCount(req.params.count);
         if (limit < 0) {
             logger.warn('Received invalid count');
@@ -69,7 +69,7 @@ app.prepare().then(() => {
                     logger.error('Error finding siege match IDs');
                     res.status(500).send({ error: 'Error finding siege match IDs' });
                 } else {
-                    logger.trace('Successfully found siege match IDs!');
+                    logger.info('Successfully found siege match IDs!');
                     res.send({ result: result });
                 }
             });
@@ -77,7 +77,7 @@ app.prepare().then(() => {
     });
 
     server.get('/api/:guildName/siegeMatches/id/:siegeID', (req, res) => {
-        logger.trace(`Received request for siege match data`);
+        logger.info(`Received request for siege match data`);
         let siegeList = ServerUtils.formatSiegeList(req.params.siegeIDs.split('+'));
         if (!ServerUtils.isValidSiegeList(siegeList)) {
             logger.warn('Received NaN siegeID'); // siegeList = list of siegeIDs
@@ -89,21 +89,23 @@ app.prepare().then(() => {
                     logger.error(`Error finding siege match with siege_id ${siegeID}`);
                     res.status(500).send({ error: `Error finding siege match with siege_id ${siegeID}` });
                 }
-                logger.trace(`Successfully found siege match with siege_id ${siegeID}!`);
+                logger.info(`Successfully found siege match with siege_id ${siegeID}!`);
                 res.send({ result: result[0] });
             });
         }
     });
 
     server.get('/api/:guildName/siegeMatches/week/:week', (req, res) => {
-        logger.trace(`Received request for siege match data from week ${req.params.week}`);
+        logger.info(`Received request for siege match data from week ${req.params.week}`);
         if (!ServerUtils.isValidWeek(req.params.week)) {
             logger.warn('Received invalid week parameter');
             res.status(400).send({ error: 'Given week needs to have format yyyymmww (e.g. 20190402 for 2019 April week 2)' });
             return;
         } else {
-            const idPrefixForWeek = req.params.week; // week format matches first part of siege_id provided by game
-            const idWeek1 = parseInt(idPrefixForWeek + '01', 10); // ids stored as ints
+            // Week format matches first part of siege_id provided by game.
+            const idPrefixForWeek = req.params.week;
+            // Ids stored as ints in MongoDB.
+            const idWeek1 = parseInt(idPrefixForWeek + '01', 10);
             const idWeek2 = parseInt(idPrefixForWeek + '02', 10);
             logger.debug(`Querying siege match data for matches with siege_ids ${idWeek1}, ${idWeek2}`);
             dbClient.findDataInCollection({ 
@@ -114,7 +116,7 @@ app.prepare().then(() => {
                     logger.error(`Error finding battle log data for two matches in week ${idPrefixForWeek}`);
                     res.status(500).send({ error: `Error finding battle log data for two matches in week ${idPrefixForWeek}` });
                 } else {
-                    logger.trace(`Successfully found battle log data for matches in week ${idPrefixForWeek}!`);
+                    logger.info(`Successfully found battle log data for matches in week ${idPrefixForWeek}!`);
                     res.send({ 
                         week: idPrefixForWeek,
                         result: result 
@@ -126,7 +128,7 @@ app.prepare().then(() => {
 
     // Battle Log database endpoints
     server.post('/api/:guildName/battleLogs', (req, res) => {
-        logger.trace('Received battle log data');
+        logger.info('Received battle log data');
         dbClient.updateDataInCollection({ 
             guild_name: req.params.guildName, 
             siege_id: req.body.match_info.siege_id, 
@@ -137,14 +139,14 @@ app.prepare().then(() => {
     });
 
     server.get('/api/:guildName/battleLogs', (req, res) => {
-        logger.trace('Received request for battle log data');
+        logger.info('Received request for battle log data');
         dbClient.showDataInCollection(req.params.guildName, 'battleLogs', (error, result) => {
             ServerUtils.sendSimpleQueryResponse(error, result, 'battle log', logger, res);
         });
     });
 
     server.get('/api/:guildName/battleLogs/:logType/latest', (req, res) => {
-        logger.trace('Received request for latest battle log data');
+        logger.info('Received request for latest battle log data');
         const logType = req.params.logType;
         if (!ServerUtils.isValidLogType(logType)) {
             logger.warn('Received invalid battle log type');
@@ -158,21 +160,22 @@ app.prepare().then(() => {
     });
 
     server.get('/api/:guildName/battleLogs/:logType/id/:siegeID', (req, res) => {
-        logger.trace('Received request for latest battle log data');
+        logger.info('Received request for latest battle log data');
         if (!ServerUtils.isValidLogType(req.params.logType)) {
             logger.warn('Received invalid battle log type');
             res.status(400).send({ error: 'Given logType needs to be either \'attack\' or \'defense\'' });
             return;
         } else {
             const logType = ServerUtils.formatLogType(req.params.logType);
-            const siegeID = parseInt(req.params.siegeID, 10); // params stored as strings
+            // Ids stored as strings in MongoDB.
+            const siegeID = parseInt(req.params.siegeID, 10);
             logger.debug(`Querying battleLogs for ${logType} log with siege_id ${siegeID}`);
             dbClient.findDataInCollection({ guild_name: req.params.guildName, log_type: logType, siege_id: siegeID }, 'battleLogs', (error, result) => {
                 if (error != null || result[0] == undefined) {
                     logger.error(`Error finding battle log data for match with siege_id ${siegeID}`);
                     res.status(500).send({ error: `Error finding battle log data for match with siege_id ${siegeID}` });
                 } else {
-                    logger.trace(`Successfully found battle log data for match with siege_id ${siegeID}!`);
+                    logger.info(`Successfully found battle log data for match with siege_id ${siegeID}!`);
                     res.send({ result: result[0] });
                 }
             });
@@ -180,15 +183,17 @@ app.prepare().then(() => {
     });
 
     server.get('/api/:guildName/battleLogs/:logType/week/:week', (req, res) => {
-        logger.trace(`Received request for battle log data from week ${req.params.week}`);
+        logger.info(`Received request for battle log data from week ${req.params.week}`);
         if (!ServerUtils.isValidWeek(req.params.week)) {
             logger.warn('Received invalid week parameter');
             res.status(400).send({ error: 'Given week needs to have format yyyymmww (e.g. 20190402 for 2019 April week 2)' });
             return;
         } else {
             const logType = ServerUtils.formatLogType(req.params.logType);
-            const idPrefixForWeek = req.params.week; // week format matches first part of siege_id provided by game
-            const idWeek1 = parseInt(idPrefixForWeek + '01', 10); // ids stored as ints
+            // Week format matches first part of siege_id provided by game.
+            const idPrefixForWeek = req.params.week;
+            // Ids stored as ints in MongoDB.
+            const idWeek1 = parseInt(idPrefixForWeek + '01', 10);
             const idWeek2 = parseInt(idPrefixForWeek + '02', 10);
             logger.debug(`Querying ${logType} for matches with siege_ids ${idWeek1}, ${idWeek2}`);
             dbClient.findDataInCollection({ 
@@ -200,7 +205,7 @@ app.prepare().then(() => {
                     logger.error(`Error finding battle log data for two matches in week ${idPrefixForWeek}`);
                     res.status(500).send({ error: `Error finding battle log data for two matches in week ${idPrefixForWeek}` });
                 } else {
-                    logger.trace(`Successfully found battle log data for matches in week ${idPrefixForWeek}!`);
+                    logger.info(`Successfully found battle log data for matches in week ${idPrefixForWeek}!`);
                     res.send({ 
                         week: idPrefixForWeek,
                         result: result 
@@ -212,7 +217,7 @@ app.prepare().then(() => {
 
     // Siege Deck database endpoints
     server.post('/api/:guildName/siegeDecks', (req, res) => {
-        logger.trace('Received siege deck data');
+        logger.info('Received siege deck data');
         dbClient.updateDataInCollection({ 
             guild_name: req.params.guildName, 
             player_id: req.body.player_id 
@@ -222,7 +227,7 @@ app.prepare().then(() => {
     });
 
     server.get('/api/:guildName/siegeDecks', (req, res) => {
-        logger.trace('Received request for siege deck data');
+        logger.info('Received request for siege deck data');
         dbClient.showDataInCollection(req.params.guildName, 'siegeDecks', (error, result) => {
             ServerUtils.sendSimpleQueryResponse(error, result, 'siege deck', logger, res);
         });

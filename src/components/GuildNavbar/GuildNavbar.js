@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Container from 'react-bootstrap/Container';
 import axios from 'axios';
-import SWDisplayUtils from '../../swDisplayUtils';
+import DisplayFormatter from '../..//displayFormatter';
 import './GuildNavbar.css';
     
 class GuildNavbar extends Component {
@@ -40,7 +40,7 @@ class GuildNavbar extends Component {
                                     const route = `/siegeMatch/${siegeID}`
                                     return (
                                         <NavDropdown.Item key={siegeID} href={route}>
-                                            {SWDisplayUtils.getSiegeDateLabel(siegeID)}
+                                            {DisplayFormatter.getSiegeDateLabel(siegeID)}
                                         </NavDropdown.Item>
                                     );
                                 })

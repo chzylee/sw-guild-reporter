@@ -18,27 +18,43 @@ module.exports = {
     },
 
     getSiegeDateTitle(siegeID) {
-        let idString = siegeID.toString();
-        // Based on deduced format of siege_id numbers.
-        let year = idString.substring(0, 4);
-        let month = this.getMonthName(idString.substring(4, 6));
-        // No month has double digit number of weeks.
-        let week = idString.substring(7, 8);
-        // 1 or 2 corresponding whether it is war 1/2 or 2/2 of the 2 weekly wars.
-        let warNumber = idString.substring(9);
-        // Most players refer to "matches" as wars (following in-game text).
-        return `${month} ${year}, Week ${week}, War ${warNumber}`;
+        if (typeof(siegeID) !== 'number') {
+            return 'Invalid siege ID';
+        }
+        try {
+            let idString = siegeID.toString();
+            // Based on deduced format of siege_id numbers.
+            let year = idString.substring(0, 4);
+            let month = this.getMonthName(idString.substring(4, 6));
+            // No month has double digit number of weeks.
+            let week = idString.substring(7, 8);
+            // 1 or 2 corresponding whether it is war 1/2 or 2/2 of the 2 weekly wars.
+            let warNumber = idString.substring(9);
+            // Most players refer to "matches" as wars (following in-game text).
+            return `${month} ${year}, Week ${week}, War ${warNumber}`;
+        }
+        catch (e) {
+            return 'Invalid siege ID';
+        }
     },
 
     getSiegeDateLabel(siegeID) {
-        let idString = siegeID.toString();
-        let year = idString.substring(0, 4);
-        let month = idString.substring(4, 6);
-        // No month has double digit number of weeks.
-        let week = idString.substring(7, 8);
-        let warNumber = idString.substring(9);
-        // Most players refer to "matches" as wars (following in-game text).
-        return `${month}/${year} week ${week}: ${warNumber}/2`;
+        if (typeof(siegeID) !== 'number') {
+            return 'Invalid siege ID';
+        }
+        try {
+            let idString = siegeID.toString();
+            let year = idString.substring(0, 4);
+            let month = idString.substring(4, 6);
+            // No month has double digit number of weeks.
+            let week = idString.substring(7, 8);
+            let warNumber = idString.substring(9);
+            // Most players refer to "matches" as wars (following in-game text).
+            return `${month}/${year} week ${week}: ${warNumber}/2`;
+        }
+        catch (e) {
+            return 'Invalid siege ID';
+        }
     },
 
     getGuildSuccessRateLabel(guildBattleLogs) {
@@ -73,8 +89,33 @@ module.exports = {
     formatLogType(logType) {
         if (logType == 'attack-logs') {
             return 'Attack';
-        } else {
+        } else if (logType == 'defense-logs') {
             return 'Defense';
+        }
+        else {
+            return 'Invalid log type';
+        }
+    },
+
+    getTotalAttemptsLabel(logType) {
+        if (logType == 'attack-logs') {
+            return 'Total Battles';
+        } else if (logType == 'defense-logs') {
+            return 'Total Placements';
+        }
+        else {
+            return 'Invalid log type';
+        }
+    },
+
+    getTotalAttemptsField(logType) {
+        if (logType == 'attack-logs') {
+            return 'totalBattles';
+        } else if (logType == 'defense-logs') {
+            return 'totalPlacements';
+        }
+        else {
+            return 'invalidLogType';
         }
     },
 
