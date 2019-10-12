@@ -48,6 +48,23 @@ describe('ServerUtils', () => {
         expect(isWeekValid).toBe(false);
     });
 
+    it('should determine if given siege ID is reasonably viable', () => {
+        let possibleSiege = '2019070101';
+        // Siege match can only be 01 or 02
+        let lateMatch = '2019040303';
+        let noMatch = '2019040300';
+        // Siege ID must also have a valid week.
+        let badWeek = '2019042101';
+        let isPossibleValid = ServerUtils.isValidMatch(possibleSiege);
+        let isLateMatchValid = ServerUtils.isValidMatch(lateMatch);
+        let isNoMatchValid = ServerUtils.isValidMatch(noMatch);
+        let isWeekValid = ServerUtils.isValidMatch(badWeek);
+        expect(isPossibleValid).toBe(true);
+        expect(isLateMatchValid).toBe(false);
+        expect(isNoMatchValid).toBe(false);
+        expect(isWeekValid).toBe(false);
+    });
+
     it('should validate siege list by confirming it is list of numeric IDs and has 1-6 IDs', () => {
         let siegeIDs = [2019040301, 2019040302, 2019040401, 2019040402, 2019050101, 2019050102];
         let noIDs = [];

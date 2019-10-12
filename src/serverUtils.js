@@ -62,13 +62,19 @@ module.exports = {
         if (monthNumber > 12 || monthNumber < 0) {
             return false;
         }
-        const weekNumber = parseInt(week.substring(7), 10);
+        const weekNumber = parseInt(week.substring(7, 8), 10);
         // Siege matches start monday and thursday, so a month cannot have more than 5 weeks counted.
         if (week.substring(6,7) != '0' || weekNumber > 5) {
             return false;
         }
         const yearNumber = parseInt(week.substring(0,4));
         return yearNumber > 2016; // Siege was released in 2017.
+    },
+
+    isValidMatch(siegeID) {
+        const matchNumber = parseInt(siegeID.substring(8,10), 10);
+        console.log(matchNumber);
+        return this.isValidWeek(siegeID) && (matchNumber === 2 || matchNumber === 1);
     },
 
     formatSiegeList(siegeList) {
