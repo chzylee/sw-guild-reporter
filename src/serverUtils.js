@@ -15,6 +15,7 @@ module.exports = {
             res.status(500).send({ error: `Error finding ${dataLabel} data` });
         } else {
             logger.info(`Successfully found ${dataLabel} data!`);
+            logger.debug(result);
             res.send({ result: result });
         }
     },
@@ -72,9 +73,10 @@ module.exports = {
     },
 
     isValidMatch(siegeID) {
-        const matchNumber = parseInt(siegeID.substring(8,10), 10);
+        var formattedId = siegeID.toString();
+        const matchNumber = parseInt(formattedId.substring(8,10), 10);
         console.log(matchNumber);
-        return this.isValidWeek(siegeID) && (matchNumber === 2 || matchNumber === 1);
+        return this.isValidWeek(formattedId) && (matchNumber === 2 || matchNumber === 1);
     },
 
     formatSiegeList(siegeList) {

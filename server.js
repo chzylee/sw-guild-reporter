@@ -65,21 +65,15 @@ app.prepare().then(() => {
         } else {
             logger.debug(`Querying siegeMatches for ${limit} recent ids`);
             dbClient.getSiegeMatchIDs(req.params.guildName, limit, (error, result) => {
-                if (error != null) {
-                    logger.error('Error finding siege match IDs');
-                    res.status(500).send({ error: 'Error finding siege match IDs' });
-                } else {
-                    logger.info('Successfully found siege match IDs!');
-                    res.send({ result: result });
-                }
+                ServerUtils.sendSimpleQueryResponse(error, result, 'Siege Match IDs', logger, res);
             });
         }
     });
 
     server.get('/api/:guildName/siegeMatches/id/:siegeID', (req, res) => {
         logger.info(`Received request for siege match data`);
-        let siegeList = ServerUtils.formatSiegeList(req.params.siegeID.split('+'));
-        if (!ServerUtils.isValidSiegeList(siegeList)) {
+        let siegeID = parseInt(req.params.siegeID, 10);
+        if (!ServerUtils.isValidMatch(siegeID)) {
             logger.warn('Received NaN siegeID'); // siegeList = list of siegeIDs
             res.status(400).send({ error: 'Given siegeID(s) need to be the numeric IDs separated by a + (e.g. 2019040301+2019040302)' });
         } else {
@@ -89,8 +83,11 @@ app.prepare().then(() => {
                     logger.error(`Error finding siege match with siege_id ${siegeID}`);
                     res.status(500).send({ error: `Error finding siege match with siege_id ${siegeID}` });
                 }
-                logger.info(`Successfully found siege match with siege_id ${siegeID}!`);
-                res.send({ result: result[0] });
+                else {
+                    logger.info(`Successfully found siege match with siege_id ${siegeID}!`);
+                    logger.debug(result);
+                    res.send({ result: result[0] });
+                }
             });
         }
     });
@@ -117,6 +114,7 @@ app.prepare().then(() => {
                     res.status(500).send({ error: `Error finding battle log data for two matches in week ${idPrefixForWeek}` });
                 } else {
                     logger.info(`Successfully found battle log data for matches in week ${idPrefixForWeek}!`);
+                    logger.debug(result);
                     res.send({ 
                         week: idPrefixForWeek,
                         result: result 
@@ -164,7 +162,6 @@ app.prepare().then(() => {
         if (!ServerUtils.isValidLogType(req.params.logType)) {
             logger.warn('Received invalid battle log type');
             res.status(400).send({ error: 'Given logType needs to be either \'attack\' or \'defense\'' });
-            return;
         } else {
             const logType = ServerUtils.formatLogType(req.params.logType);
             // Ids stored as strings in MongoDB.
@@ -176,6 +173,7 @@ app.prepare().then(() => {
                     res.status(500).send({ error: `Error finding battle log data for match with siege_id ${siegeID}` });
                 } else {
                     logger.info(`Successfully found battle log data for match with siege_id ${siegeID}!`);
+                    logger.debug(result);
                     res.send({ result: result[0] });
                 }
             });
@@ -206,6 +204,7 @@ app.prepare().then(() => {
                     res.status(500).send({ error: `Error finding battle log data for two matches in week ${idPrefixForWeek}` });
                 } else {
                     logger.info(`Successfully found battle log data for matches in week ${idPrefixForWeek}!`);
+                    logger.debug(result);
                     res.send({ 
                         week: idPrefixForWeek,
                         result: result 
@@ -252,11 +251,13 @@ app.prepare().then(() => {
             // Redirect to show info for 1 match.
             res.redirect(`/siegeMatch/${siegeList[0]}`);
         }
-        if (!ServerUtils.isValidSiegeList(siegeList)) {
-            logger.warn('Received NaN siegeID');
-            res.status(400).send({ error: 'Given siegeID(s) need to be the numeric IDs separated by a + (e.g. 2019040301+2019040302)' });
-        } else {
-            return app.render(req, res, '/aggregateSummary', { selectedSieges: siegeList, apiRoute: req.params.siegeIDs });
+        else {
+            if (!ServerUtils.isValidSiegeList(siegeList)) {
+                logger.warn('Received NaN siegeID or list was not of proper length');
+                res.status(400).send({ error: 'Given siegeID(s) need to be the numeric IDs separated by a + (e.g. 2019040301+2019040302)' });
+            } else {
+                return app.render(req, res, '/aggregateSummary', { selectedSieges: siegeList, apiRoute: req.params.siegeIDs });
+            }
         }
     });
 

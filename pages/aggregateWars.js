@@ -58,7 +58,7 @@ class AggregateWars extends React.Component {
                 { 
                     this.state.selected.map((siegeID) => {
                         return (
-                            <ListGroup.Item>
+                            <ListGroup.Item key={siegeID}>
                                 {DisplayFormatter.getSiegeDateTitle(siegeID)}
                             </ListGroup.Item>
                         );
