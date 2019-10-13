@@ -75,4 +75,21 @@ describe('ServerUtils', () => {
         expect(ServerUtils.isValidSiegeList(noIDs)).toBe(false);
         expect(ServerUtils.isValidSiegeList(tooManyIDs)).toBe(false);
     });
+
+    it('should format siege match query for one or more siege IDs', () => {
+        let siegeIDs = [2019040301, 2019040302, 2019040401];
+        let oneID = [2019040301];
+        var multipleIDQuery = ServerUtils.getSiegeMatchQuery('fakeguild', siegeIDs);
+        var oneIDQuery = ServerUtils.getSiegeMatchQuery('fakeguild', oneID);
+        expect(multipleIDQuery).toEqual(
+        {
+            guild_name: 'fakeguild',
+            $or: [
+                {siege_id: 2019040301},
+                {siege_id: 2019040302},
+                {siege_id: 2019040401}
+            ]
+        });
+        expect(oneIDQuery).toEqual({guild_name: 'fakeguild', siege_id: 2019040301});
+    });
 });

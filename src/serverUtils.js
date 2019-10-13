@@ -75,7 +75,6 @@ module.exports = {
     isValidMatch(siegeID) {
         var formattedId = siegeID.toString();
         const matchNumber = parseInt(formattedId.substring(8,10), 10);
-        console.log(matchNumber);
         return this.isValidWeek(formattedId) && (matchNumber === 2 || matchNumber === 1);
     },
 
@@ -86,6 +85,15 @@ module.exports = {
             formattedList.push(parseInt(siegeID, 10));
         }
         return formattedList;
+    },
+
+    getSiegeMatchQuery(guildName, siegeIds) {
+        if (siegeIds.length == 1) {
+            return { guild_name: guildName, siege_id: siegeIds[0] };
+        } else {
+            var idConditions = this.getSiegeListConditions(siegeIds);
+            return { guild_name: guildName, $or: idConditions};
+        }
     },
 
     getSiegeListConditions(siegeList) {
