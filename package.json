@@ -38,6 +38,6 @@
   ],
   "devDependencies": {
     "jasmine": "^3.4.0",
-    "log4js": "^4.1.0"
+    "log4js": "^6.4.0"
   }
 }
